@@ -56,7 +56,11 @@ const taggedSum = (typeName, constructors) => {
 const sum$cata = function (fs) {
   const tag = this[TAG]
   if (!fs[tag]) {
-    throw new TypeError("Constructors given to cata didn't include: " + tag)
+    if (fs['_']) {
+      return fs['_'].apply(fs, this[VALUES])
+    } else {
+      throw new TypeError(`Constructors given to cata didn't include: ${tag}`)
+    }
   }
   return fs[tag].apply(fs, this[VALUES])
 }
